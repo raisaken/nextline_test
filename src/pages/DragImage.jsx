@@ -1,68 +1,61 @@
-import React, { useEffect, useRef } from "react";
+import React, { useEffect, useRef, useState } from "react";
+import { Button, Col, Container, Row } from "react-bootstrap";
+import { images } from "../assets/Images";
 
 function DragImage() {
   const rectRef = useRef(null);
   const imageRef = useRef(null);
-  let base_image;
+  const [image, setImage] = useState("");
+  const handleImageChange = (id) => {
+    setImage(id);
+  };
   useEffect(() => {
     const rect = rectRef.current;
     const rectContext = rect.getContext("2d");
     rectContext.fillStyle = "green";
-    rectContext.fillRect(10, 10, 40, 40);
-
-    // const image = imageRef.current;
-    // const imageContext = image.getContext("2d");
+    rectContext.fillRect(10, 10, 70, 80);
 
     const base_image = new Image();
-    base_image.src = "https://source.unsplash.com/user/c_v_r/200x300 ";
-    // imageContext.drawImage(base_image, 100, 100);
+    base_image.src = image;
     base_image.onload = function () {
-      rectContext.drawImage(base_image, 10, 10, 40, 40);
+      rectContext.drawImage(base_image, 10, 10, 70, 80);
     };
-    console.log(base_image, "base image");
-  }, []);
-  const images = [
-    {
-      id: 1,
-      img: "https://picsum.photos/200/300",
-    },
-    {
-      id: 2,
-      img: "https://source.unsplash.com/user/c_v_r/200x300 ",
-    },
-    {
-      id: 3,
-      img: "https://picsum.photos/id/237/200/300 ",
-    },
-  ];
+  }, [image]);
 
-  const imageStyle = {
-    display: "flex",
-    marginTop: "2%",
-    marginLeft: "35%",
-  };
+  //styles
+
   const canvasStyle = {
     backgroundColor: "blue",
     border: "5px solid red",
-    width: "1200px",
+    width: "800px",
     height: "600px",
   };
-  const setImage = () => {};
+
   return (
-    <>
-      <canvas ref={rectRef} style={canvasStyle} />
-      <div ref={imageRef}></div>
-      <h1>Click on Images</h1>
-      <div style={imageStyle}>
-        {images.map((item) => {
-          return (
-            <div onClick={() => setImage(item.id)} key={item.id}>
-              <img src={item.img} alt={item.id} />
-            </div>
-          );
-        })}
-      </div>
-    </>
+    // <Container>
+    <Row>
+      <Col md={8}>
+        <h1>Canvas</h1>
+        <canvas ref={rectRef} style={canvasStyle} />
+      </Col>
+      <Col md={4}>
+        <h1>Click on Images to add it on canvas</h1>
+        <Row>
+          {images.map((item) => {
+            return (
+              <Col
+                md={4}
+                onClick={() => handleImageChange(item.img)}
+                key={item.id}
+              >
+                <img src={item.img} alt={item.id} />
+              </Col>
+            );
+          })}
+        </Row>
+      </Col>
+    </Row>
+    // </Container>
   );
 }
 
