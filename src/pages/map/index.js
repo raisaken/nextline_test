@@ -1,53 +1,20 @@
-import React, { useState } from "react";
-import MapLayout from "./components/map_layout/MapLayout";
+import React from "react";
+import { MapContainer, Marker, Popup, TileLayer } from "react-leaflet";
 
 function Map() {
-  const [jobData, setJobData] = useState();
-  const [address, setAddress] = useState();
-  console.log(window, "window");
-
-  const handleJobLocation = (latLan) => {
-    let streetAddress = null;
-    // getStreetAddresss(latLan?.lat, latLan?.lng)
-    //   .then((res) => {
-    //     streetAddr ess = {
-    //       country: {
-    //         value: res?.data?.address?.country_code?.toUpperCase(),
-    //         name: res?.data?.address?.country,
-    //       },
-    //       city:
-    //         res?.data?.address?.municipality ||
-    //         res?.data?.address?.county ||
-    //         "",
-    //       state: res?.data?.address?.region || res?.data?.address?.state || "",
-    //     };
-    //   })
-    //   .finally(() => {
-    //     if (streetAddress) {
-    //       setAddress(streetAddress);
-    //       // Object.keys(streetAddress).forEach(
-    //       //   (key) =>
-    //       //     // @ts-ignore
-
-    //       //     setValue()
-    //       //   key,
-    //       //   key === "country" ? streetAddress[key]?.name : streetAddress[key]
-    //       // );
-    //     }
-    //     // setValue("latLan", JSON.stringify(latLan));
-    //     console.log(latLan, "latLan");
-    //     setJobData((prev) => ({
-    //       ...prev,
-    //       latLan: JSON.stringify(latLan),
-    //       country: streetAddress?.country?.name,
-    //       city: streetAddress?.city,
-    //       state: streetAddress?.state,
-    //     }));
-    //   });
-  };
   return (
-    <div>
-      <MapLayout onMarkerDragEnd={handleJobLocation} /> 
+    <div style={{ height: "300px", width: "500px" }}>
+      <MapContainer center={[51.505, -0.09]} zoom={13} scrollWheelZoom={false}>
+        <TileLayer
+          attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+          url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+        />
+        <Marker position={[51.505, -0.09]}>
+          <Popup>
+            A pretty CSS3 popup. <br /> Easily customizable.
+          </Popup>
+        </Marker>
+      </MapContainer>
     </div>
   );
 }
