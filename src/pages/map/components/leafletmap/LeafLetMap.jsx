@@ -9,7 +9,7 @@ import {
   useMapEvents,
 } from "react-leaflet";
 import L from "leaflet";
-import "./leaflet.css";
+// import "./leaflet.css";  
 
 const defaultCenterPosition = [27.71, 85.32];
 
