@@ -1,20 +1,47 @@
-import React from "react";
-import { MapContainer, Marker, Popup, TileLayer } from "react-leaflet";
+import React, { useState } from "react";
+import { getStreetAddresss } from "../api/urls/methods";
+import MapLayout from "./components/map_layout/MapLayout";
 
 function Map() {
+  const [address, setAddress] = useState("");
+  const [location, setLocation] = useState("");
+  const [city, setCity] = useState("");
+
+  const handleJobLocation = (latLan) => {
+    let streetAddress = null;
+    getStreetAddresss(latLan?.lat, latLan?.lng)
+      .then((res) => {
+        streetAddress = {
+          country: {
+            value: res?.data?.address?.country_code?.toUpperCase(),
+            name: res?.data?.address?.country,
+          },
+          city:
+            res?.data?.address?.municipality ||
+            res?.data?.address?.county ||
+            "",
+          state: res?.data?.address?.region || res?.data?.address?.state || "",
+        };
+      })
+      .finally(() => {
+        if (streetAddress) {
+          setAddress(streetAddress);
+          setCity(streetAddress?.city);
+        }
+        setLocation(JSON.stringify(latLan));
+      });
+  };
+
   return (
-    <div style={{ height: "300px", width: "500px" }}>
-      <MapContainer center={[51.505, -0.09]} zoom={13} scrollWheelZoom={false}>
-        <TileLayer
-          attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-          url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
-        />
-        <Marker position={[51.505, -0.09]}>
-          <Popup>
-            A pretty CSS3 popup. <br /> Easily customizable.
-          </Popup>
-        </Marker>
-      </MapContainer>
+    <div>
+      map location{" "}
+      <input
+        type="text"
+        value={city}
+        onChange={(e) => setCity(e.target.value)}
+        style={{ zIndex: "1", margin: "50px" }}
+      />
+      <MapLayout onMarkerDragEnd={handleJobLocation} />
     </div>
   );
 }
