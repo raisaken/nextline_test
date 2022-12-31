@@ -13,3 +13,5 @@ pip freeze > requirements.txt
 Pydantic:
 All the data validation is performed under the hood by Pydantic, so you get all the benefits from it. And you know you are in good hands.
 
+sqlalchemy: orm
+

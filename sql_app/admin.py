@@ -1,6 +1,5 @@
 from fastapi import  FastAPI
 from sqladmin import  ModelView
-from .database import SessionLocal, engine
 from .models import User, Item
 
 app = FastAPI()
