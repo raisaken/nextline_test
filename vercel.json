@@ -1,0 +1,8 @@
+{
+    "builds": [
+      {"src": "/sql_app/main.py", "use": "@now/python"}
+    ],
+    "routes": [
+      {"src": "/(.*)", "dest": "sql_app/main.py"}
+    ]
+  }
