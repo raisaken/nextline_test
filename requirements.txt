@@ -3,7 +3,7 @@ aioredis==2.0.1
 aiosqlite==0.17.0
 alembic==1.7.7
 anyio==3.5.0
-apturl==0.5.2
+# apturl==0.5.2
 asgiref==3.5.0
 async-timeout==4.0.2
 attrs==21.2.0
