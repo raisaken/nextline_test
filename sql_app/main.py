@@ -5,14 +5,16 @@ from . import crud, models, schemas
 from .database import SessionLocal, engine
 
 from sqladmin import Admin
-from .admin import UserAdmin, ItemAdmin
+# from .admin import UserAdmin, ItemAdmin
+from .testadmin import UserAdmin, CustomAdmin
 
 models.Base.metadata.create_all(bind=engine)
 
 app = FastAPI()
 admin = Admin(app, engine)
 admin.add_view(UserAdmin)
-admin.add_view(ItemAdmin)
+# admin.add_view(ItemAdmin)
+admin.add_base_view(CustomAdmin)
 
 # Dependency
 def get_db():

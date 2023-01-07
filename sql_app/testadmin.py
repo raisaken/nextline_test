@@ -1,10 +1,10 @@
 from sqladmin import Admin, ModelView
 from sqladmin.authentication import AuthenticationBackend
-from sqlalchemy import Column, Integer, String, create_engine
-from sqlalchemy.ext.declarative import declarative_base
+from sqlalchemy import create_engine
 from starlette.applications import Starlette
 from starlette.requests import Request
-
+from .models import SuperUser
+from sqladmin import BaseView, expose
 
 # Base = declarative_base()
 engine = create_engine(
@@ -12,19 +12,23 @@ engine = create_engine(
     connect_args={"check_same_thread": False},
 )
 
+class CustomAdmin(BaseView):
+    name = "Custom Page"
+    icon = "fa-solid fa-chart-line"
 
-class User(Base):
-    __tablename__ = "users"
-
-    id = Column(Integer, primary_key=True)
-    name = Column(String)
-
-
-# Base.metadata.create_all(engine)
-
+    @expose("/custom", methods=["GET"])
+    def test_page(self, request: Request):
+        print(request)
+        return self.templates.TemplateResponse(
+            "custom.html",
+            context={"request": request},
+        )
 
 class MyBackend(AuthenticationBackend):
     async def login(self, request: Request) -> bool:
+        form = await request.form()
+        username, password = form["username"], form["password"]
+        print(username,'username')
         request.session.update({"token": "..."})
         return True
 
@@ -33,7 +37,14 @@ class MyBackend(AuthenticationBackend):
         return True
 
     async def authenticate(self, request: Request) -> bool:
-        return "token" in request.session
+        token = request.session.get("token")
+
+        if not token:
+            return False
+
+        # Check the token
+        return True
+
 
 
 app = Starlette()
@@ -41,7 +52,7 @@ authentication_backend = MyBackend(secret_key="...")
 admin = Admin(app=app, engine=engine, authentication_backend=authentication_backend)
 
 
-class UserAdmin(ModelView, model=User):
+class UserAdmin(ModelView, model=SuperUser):
     def is_visible(self, request: Request) -> bool:
         return True
 
@@ -49,4 +60,4 @@ class UserAdmin(ModelView, model=User):
         return True
 
 
-admin.add_view(UserAdmin)
+# admin.add_view(UserAdmin)
